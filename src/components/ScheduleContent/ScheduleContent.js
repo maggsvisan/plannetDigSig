@@ -113,29 +113,28 @@ class SchedulerContent extends Component {
                         );
                     });
                     
+                    let k=0;
+                    var count = {};
+                    commonVideos= [];
+                    arrayVideos2.forEach(function(i) { 
+                        k=k+1;
+                        count[i] = (count[i]||0) + 1;
+                        //console.log("i",i); //i es el contenido del array
+                        if(count[i] >= numberOfChildren){
+                            commonVideos.push({name: i, key:k});
+                          
+                           console.log(`the count is ${k}`,commonVideos);
+                        }
+                    });
+                    this.setState({commonDropDown:commonVideos});
                     }, (err) => {
                             console.log(err);
                             });    
             }
-            
-            let k=0;
-            var count = {};
-            commonVideos= [];
-            arrayVideos2.forEach(function(i) { 
-                k=k+1;
-                count[i] = (count[i]||0) + 1;
-                //console.log("i",i); //i es el contenido del array
-                if(count[i] >= numberOfChildren){
-                    commonVideos.push({name: i, key:k});
-                  
-                   console.log(`the count is ${k}`,commonVideos);
-                }
-            });
-            this.setState({commonDropDown:commonVideos});
 
         }, (err) => {
-                console.log(err);
-            });
+            console.log(err);
+        });
 
 
         firebaseApp.database().ref(`Inventory/${screenName2}/`) // videos per screen
