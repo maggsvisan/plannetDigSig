@@ -93,7 +93,7 @@ class SchedulerContent extends Component {
 
         let arrayVideos2;
         let initialVideos2;
-       
+        
         //get common dropdown
         inventoryRef.on('value', (data) => {
             numberOfChildren=data.numChildren();
@@ -111,31 +111,34 @@ class SchedulerContent extends Component {
                             arrayVideos2.push(initialVideos2.name);
                             }
                         );
-                    });
+                });
                     
-                    let k=0;
-                    var count = {};
-                    commonVideos= [];
-                    arrayVideos2.forEach(function(i) { 
-                        k=k+1;
-                        count[i] = (count[i]||0) + 1;
-                        //console.log("i",i); //i es el contenido del array
-                        if(count[i] >= numberOfChildren){
-                            commonVideos.push({name: i, key:k});
-                          
-                           console.log(`the count is ${k}`,commonVideos);
-                        }
-                    });
-                    this.setState({commonDropDown:commonVideos});
-                    }, (err) => {
-                            console.log(err);
-                            });    
+                let k=0;
+                var count = {};
+                commonVideos= [];
+                
+                arrayVideos2.forEach(function(i) { 
+                    k=k+1;
+                    count[i] = (count[i]||0) + 1;
+                    //console.log("i",i); //i es el contenido del array
+                    if(count[i] >= numberOfChildren){
+                        commonVideos.push({name: i, key:k});
+                        
+                        console.log(`the count is ${k}`,commonVideos);
+                    }
+                });
+                this.setState({commonDropDown:commonVideos});
+                }, (err) => {
+                        console.log(err);
+                });    
             }
 
         }, (err) => {
             console.log(err);
         });
 
+
+       
 
         firebaseApp.database().ref(`Inventory/${screenName2}/`) // videos per screen
         .on('value', (data) => {
@@ -428,8 +431,8 @@ class SchedulerContent extends Component {
                                                     handleChange={this.handleScheduleChange}
                                                     name="video"
                                                     index={index}
-                                                    //items={this.state.commonDropDown}
-                                                    items= {commonVideos}
+                                                    items={this.state.commonDropDown}
+                                                    //items= {commonVideos}
                                                 />            
                                         </div>
                                         </div>): ( 
