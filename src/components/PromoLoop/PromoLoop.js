@@ -26,6 +26,7 @@ let arrayVideos= [];
 let initialVideos;
 let videoName2;
 let screenName2;
+let videoNameList= [];
 
 let promoLoopRef;
 let startDB;
@@ -123,6 +124,8 @@ class PromoLoop extends Component {
          });
          // set SET DEFAULT VALUES for first screen //
 
+
+        
         firebaseApp.database().ref(`Inventory/${screenName2}/`) // videos per screen
         .on('value', (data) => {
               let values = data.val();
@@ -142,6 +145,25 @@ class PromoLoop extends Component {
           }, (err) => {
               console.log(err);
           });
+         
+          /*
+          firebaseApp.database().ref(`Videos_per_Screen/${screenName2}/`) //Dropdown videos per screen
+         .on('value', (data) => {
+            let values2 = data.val();
+            let amountVideos= values2.Amount_of_Videos;          
+            arrayVideos=[];
+            
+            Object.keys(values2).forEach(function(e) {
+                console.log(`key=${e}  value=${values2[e]}`);
+                arrayVideos.push({name: values2[e], key:e});  
+                
+            });
+    
+        }, (err) => {
+            console.log(err);
+        });
+        */
+
 
     }
 

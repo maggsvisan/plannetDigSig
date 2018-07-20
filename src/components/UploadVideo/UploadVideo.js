@@ -63,7 +63,7 @@ class UploadVideo extends Component {
                 Object.keys(this.state.videos).map((key, index) => {
                     initialVideos = this.state.videos[key];
                     videoName2= initialVideos.name;
-                    //arrayVideos.push({name: videoName2, key:key});
+                   
                     videosGralInv.push({name: videoName2, key:key});  
                     this.setState({gralInventory:videosGralInv });
                     }
@@ -137,7 +137,14 @@ class UploadVideo extends Component {
             videoNameList=[];
             Object.keys(values2).forEach(function(e) {
                 console.log(`key=${e}  value=${values2[e]}`);
-                videoNameList.push({name: values2[e], key:e});  
+
+                if (e !== "Amount_of_Videos"){
+                    videoNameList.push({name: values2[e], key:e});  
+                }
+                
+                else{
+                    console.log("testing...");
+                }
                 
             });
 
@@ -148,7 +155,7 @@ class UploadVideo extends Component {
         });
 
         /*
-        firebaseApp.database().ref(`Inventory/${screenName2}/`)
+        firebaseApp.database().ref(`Inventory/${screenName2}/`) //drop down desde interfaz (Gral Inv)
             .on('value', (data) => {
                 let values = data.val();
                 this.setState({ videos: values });
