@@ -129,33 +129,8 @@ class UploadVideo extends Component {
         
         screenName2 = this.state.screenName;
         screenName2= screenName2.replace(" ",""); 
-
-        firebaseApp.database().ref(`Videos_per_Screen/${screenName2}/`) //Dropdown videos per screen
-        .on('value', (data) => {
-            let values2 = data.val();
-            let amountVideos= values2.Amount_of_Videos;          
-            videoNameList=[];
-            Object.keys(values2).forEach(function(e) {
-                console.log(`key=${e}  value=${values2[e]}`);
-
-                if (e !== "Amount_of_Videos"){
-                    videoNameList.push({name: values2[e], key:e});  
-                }
-                
-                else{
-                    console.log("testing...");
-                }
-                
-            });
-
-            this.setState({videos: videoNameList }) ; 
-
-        }, (err) => {
-            console.log(err);
-        });
-
-        /*
-        firebaseApp.database().ref(`Inventory/${screenName2}/`) //drop down desde interfaz (Gral Inv)
+    
+        firebaseApp.database().ref(`Inventory/${screenName2}/`) 
             .on('value', (data) => {
                 let values = data.val();
                 this.setState({ videos: values });
@@ -164,9 +139,10 @@ class UploadVideo extends Component {
             }, (err) => {
                 console.log(err);
             });
-        */
+        
     }
    
+    
 
     handleScreenChange = (name, value) => {
         arrayVideos = [];

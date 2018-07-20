@@ -62,7 +62,7 @@ class SchedulerContent extends Component {
         dayOfWeek: '',
         videos: '',
         indexState: '',
-        value: 'coconut',
+        value: '',
         screenName: 'Screen1',
         listOfSchedule: [],
         screens: [],
@@ -138,8 +138,6 @@ class SchedulerContent extends Component {
         });
 
 
-       
-
         firebaseApp.database().ref(`Inventory/${screenName2}/`) // videos per screen
         .on('value', (data) => {
               let values = data.val();
@@ -160,6 +158,7 @@ class SchedulerContent extends Component {
           }, (err) => {
               console.log(err);
           });
+
 
           //when is Screen1 the first option
             firebaseApp.database().ref(`Inventory/${screenName2}/`) //first value for dropdowns, screen1
@@ -251,6 +250,7 @@ class SchedulerContent extends Component {
 
             this.setState({showCommonDrop:false});
         });
+    
     }
 
     handleVideoChange = (name, value) => {

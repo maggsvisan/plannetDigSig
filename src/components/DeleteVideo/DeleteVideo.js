@@ -34,7 +34,9 @@ class DeleteVideo extends Component {
         videoList: []
     }
 
-    handleVideoChange = (name, value) => {
+    handleVideoChange = (name, value,key) => {
+        console.log("keykey", key);
+        console.log("the value", value);
         this.setState({ deleteVideo: value});
     }
 
@@ -84,9 +86,11 @@ class DeleteVideo extends Component {
         }).then((dataSnapshot) => {
             this.setState({deleteVideoRoot: defaultRootVideos.name});
         });
+        
         // set SET DEFAULT VALUES for first screen //
 
         // SET DYNAMIC DROPDOWNS //
+
         firebaseApp.database().ref(`Inventory/${screenName2}/`) // videos per screen
         .on('value', (data) => {
               let values = data.val();
@@ -171,7 +175,7 @@ class DeleteVideo extends Component {
                 alert("Video not found");
         });
         
-        //window.location.reload();          
+        window.location.reload();          
         
     }
 
@@ -186,20 +190,20 @@ class DeleteVideo extends Component {
             let video2delete=  this.state.deleteVideo;
             console.log("video to delete", this.state.deleteVideo);
 
-                logFilesRef.child(`${screenName2}`).orderByChild('name').equalTo(video2delete).once('value').then(function(snapshot) {  
-                        console.log("the key is ",snapshot.key);
-                        console.log("snapshot.val()",snapshot.val());
-                        
-                        let key = Object.keys(snapshot.val())[0];
-                        //console.log("thekey", key);
-                        
-                        logFilesRef.child(`${screenName2}`).child(key).remove();
-                        alert(`Deleted: ${video2delete} from ${screenName2}` );
+            logFilesRef.child(`${screenName2}`).orderByChild('name').equalTo(video2delete).once('value').then(function(snapshot) {  
+                console.log("the key is ",snapshot.key);
+                console.log("snapshot.val()",snapshot.val());
+                
+                let key = Object.keys(snapshot.val())[0];
+                //console.log("thekey", key);
+                
+                logFilesRef.child(`${screenName2}`).child(key).remove();
+                alert(`Deleted: ${video2delete} from ${screenName2}` );
 
-                    }).catch(function(error) {
-                        // Uh-oh, an error occurred!
-                            console.log(error);
-                    });; 
+            }).catch(function(error) {
+                // Uh-oh, an error occurred!
+                    console.log(error);
+            }); 
         }
 
        window.location.reload();
@@ -213,27 +217,27 @@ class DeleteVideo extends Component {
         this.setState({ screenName: value});
         screenName2 = value;
         screenName2= screenName2.replace(" ",""); 
-        
-        firebaseApp.database().ref(`Inventory/${screenName2}/`)
-          .on('value', (data) => {
-            arrayVideos = [];
-              let values = data.val();
-              console.log("values", values);
-              this.setState({ videos: values }, () => {
-               
-                Object.keys(this.state.videos).map((key, index) => {
-                    initialVideos = this.state.videos[key]
-                    videoName2= initialVideos.name;
-                    arrayVideos.push({name: videoName2, key: key});    
-                    this.setState({videoList: arrayVideos }) ; 
-              }
-            );
-         
-            });
 
-          }, (err) => {
-              console.log(err);
+        firebaseApp.database().ref(`Inventory/${screenName2}/`)
+        .on('value', (data) => {
+          arrayVideos = [];
+            let values = data.val();
+            console.log("values", values);
+            this.setState({ videos: values }, () => {
+             
+              Object.keys(this.state.videos).map((key, index) => {
+                  initialVideos = this.state.videos[key]
+                  videoName2= initialVideos.name;
+                  arrayVideos.push({name: videoName2, key: key});    
+                  this.setState({videoList: arrayVideos }) ; 
+            }
+          );
+       
           });
+
+        }, (err) => {
+            console.log(err);
+        });
 
     }
 
