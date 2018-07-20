@@ -3,6 +3,7 @@ import './Scheduler.css';
 import SchedulerContent from '../ScheduleContent/ScheduleContent'
 import { Collapsible, CollapsibleItem, Modal, Button, Icon } from 'react-materialize';
 
+
 const Days = [
     { name: "Monday", key: 0 },
     { name: "Tuesday", key: 1 },
@@ -14,7 +15,6 @@ const Days = [
 ]
 
 class Scheduler extends Component {
-
     render() {
         return (
             <div className="Scheduler" >
@@ -34,6 +34,7 @@ class Scheduler extends Component {
                 </div>
 
                 <Collapsible>
+                    
                     {Days.map(({ name, key }) => (
                         <CollapsibleItem
                             key={key}

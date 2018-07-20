@@ -30,6 +30,8 @@ let inventoryRef;
 let numberOfChildren;
 let videoNameDB;
 let commonVideos= [];
+let arrayVideos2;
+let initialVideos2;
 
 let response= [];
 const timeNumber = [];
@@ -80,60 +82,44 @@ class SchedulerContent extends Component {
             },
         ]
     }
+    
 
     componentDidMount() {
-        
         schedulerRef= firebaseApp.database().ref().child("Scheduler");
         inventoryRef= firebaseApp.database().ref().child("Inventory");
         screenName2 = this.state.screenName;
-        //console.log("screenName2",screenName2);
         videoName2 = "";
-        initialVideos;
-        numberOfChildren;
 
-        let arrayVideos2;
-        let initialVideos2;
-        
         //get common dropdown
-        inventoryRef.on('value', (data) => {
-            numberOfChildren=data.numChildren();
-            let values2 = data.val(); //all records in inventory
+        inventoryRef.once("value").then(function(snapshot) {
+            numberOfChildren=snapshot.numChildren();
+            let values2 = snapshot.val(); 
             arrayVideos2 = [];
-            
-            for (let i=1; i<= numberOfChildren; i++){
-                firebaseApp.database().ref(`Inventory/Screen${i}/`) // videos per screen
-                .on('value', (data) => {
-                let values2 = data.val();
-                
-                this.setState({ videos2: values2 }, () => {
-                    Object.keys(this.state.videos2).map((key, index) => {
-                            initialVideos2 = this.state.videos2[key]
-                            arrayVideos2.push(initialVideos2.name);
-                            }
-                        );
-                });
-                    
-                let k=0;
-                var count = {};
-                commonVideos= [];
-                
-                arrayVideos2.forEach(function(i) { 
-                    k=k+1;
-                    count[i] = (count[i]||0) + 1;
-                    //console.log("i",i); //i es el contenido del array
-                    if(count[i] >= numberOfChildren){
-                        commonVideos.push({name: i, key:k});
-                        
-                        console.log(`the count is ${k}`,commonVideos);
-                    }
-                });
-                this.setState({commonDropDown:commonVideos});
-                }, (err) => {
-                        console.log(err);
-                });    
-            }
 
-        }, (err) => {
+            snapshot.forEach(function(childSnapshot) {
+                let newState= childSnapshot.val();
+
+                Object.keys(newState).map((key, index) => {
+                    initialVideos2 = newState[key] 
+                    arrayVideos2.push(initialVideos2.name);
+                    //console.log("arrayVideos2",arrayVideos2);
+                    }
+                );
+            });
+
+            let k=0;
+            var count = {};
+            commonVideos= [];
+        
+            arrayVideos2.forEach(function(i) { 
+                k=k+1;
+                count[i] = (count[i]||0) + 1;
+                if(count[i] >= numberOfChildren){
+                    commonVideos.push({name: i, key:k});
+                    console.log(`the count is ${k}`,commonVideos);
+                }
+            });
+        },(err) => {
             console.log(err);
         });
 
@@ -189,16 +175,14 @@ class SchedulerContent extends Component {
           }, (err) => {
               console.log(err);
           });
-        }
+    }
 
     selectAll = () => { //Select all screens!
         console.log("Select all screens!");
-        
         alert("Selected all screens")
         this.setState({screenName: "all"});
-        this.setState({showCommonDrop:true});
-        
-        
+        console.log("the commong list is", this.state.commonDropDown)
+        this.setState({showCommonDrop:true}); 
     }
 
 
@@ -404,6 +388,7 @@ class SchedulerContent extends Component {
                                     <Button  
                                         onClick={() => {
                                             this.selectAll();
+                                            
                                         }}
                                         type="submit" value="Apply"> All Screen 
                                     </Button>
@@ -431,8 +416,8 @@ class SchedulerContent extends Component {
                                                     handleChange={this.handleScheduleChange}
                                                     name="video"
                                                     index={index}
-                                                    items={this.state.commonDropDown}
-                                                    //items= {commonVideos}
+                                                    //items={this.state.videoList}
+                                                    items= {commonVideos}
                                                 />            
                                         </div>
                                         </div>): ( 
