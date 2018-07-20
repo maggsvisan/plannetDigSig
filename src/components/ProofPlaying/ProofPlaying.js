@@ -119,8 +119,10 @@ class ProofPlaying extends Component {
                 screen= screen.replace(" ","");
                 let foundMonth= month.find(isMonth);
                 months= foundMonth.key;
-               
-                logFileName= `${screen}_(${currentYear}-${months}-${day}).txt`;
+
+                //logFileName= `${screen}_(${currentYear}-${months}-${day}).txt`;
+                logFileName= `${screen}_LogFile_[${currentYear}-${months}-${day}].txt`;
+                
                 this.dowloadLogFile(screen, logFileName);   
             }
         });

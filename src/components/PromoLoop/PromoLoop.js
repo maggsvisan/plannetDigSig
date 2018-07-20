@@ -297,6 +297,10 @@ class PromoLoop extends Component {
                 endDB= this.state.schedules[0].end;
 
                 screen2Push= screen2Push.replace(" ",""); 
+                //video2Push= video2Push.replace(/\s/g,'');
+                video2Push = video2Push.replace("(", "_");
+                video2Push = video2Push.replace(")","_");
+                video2Push = video2Push.replace(/ /g,"_");
                 
                 promoLoopRef.once('value', function(snapshot) {
                     promoLoopRef.child(`${screen2Push}`).update({

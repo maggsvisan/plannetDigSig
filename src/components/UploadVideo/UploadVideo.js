@@ -24,6 +24,7 @@ let arrayPerScreen = [];
 let arrayVideos = [];
 let arrayScreens= [];
 let gralInventory;
+let videoNameList=[];
 
 class UploadVideo extends Component {
     state = {
@@ -125,18 +126,38 @@ class UploadVideo extends Component {
 
     showVideos = () => {
         this.setState({ showResults: true});
-
+        
         screenName2 = this.state.screenName;
         screenName2= screenName2.replace(" ",""); 
 
+        firebaseApp.database().ref(`Videos_per_Screen/${screenName2}/`) //Dropdown videos per screen
+        .on('value', (data) => {
+            let values2 = data.val();
+            let amountVideos= values2.Amount_of_Videos;          
+            videoNameList=[];
+            Object.keys(values2).forEach(function(e) {
+                console.log(`key=${e}  value=${values2[e]}`);
+                videoNameList.push({name: values2[e], key:e});  
+                
+            });
+
+            this.setState({videos: videoNameList }) ; 
+
+        }, (err) => {
+            console.log(err);
+        });
+
+        /*
         firebaseApp.database().ref(`Inventory/${screenName2}/`)
             .on('value', (data) => {
                 let values = data.val();
                 this.setState({ videos: values });
+                console.log("originalValues",values)
 
             }, (err) => {
                 console.log(err);
             });
+        */
     }
    
 
@@ -182,7 +203,6 @@ class UploadVideo extends Component {
             });
 
             if(repeated === true){
-                console.log("Repetidoooo");
                 alert(`Video already uploaded to ${screenIndex}, try another video`)
             }
 
@@ -190,7 +210,10 @@ class UploadVideo extends Component {
                  //push to inventory and update "Uploaded Video"
                 logFilesRef.child(`${screenIndex}`).push({ name: videoName3})
                 .on('child_added', function(snap) {
-                        videoName3= videoName3.replace(/\s/g,'');
+                        //videoName3= videoName3.replace(/\s/g,'');
+                        videoName3 = videoName3.replace("(", "_");
+                        videoName3 = videoName3.replace(")","_");
+                        videoName3 = videoName3.replace(/ /g,"_");
                         uploaded_videos.child(`${screenIndex}`).update({ Trigger: 1, Video_Name: videoName3}); 
                 });
                 
@@ -260,7 +283,7 @@ class UploadVideo extends Component {
         });
 
         if (existInDatabase === false){
-            let uploadTask= storageRef.child(`videosInventory/${videoName}`).put(this.state.selectedVideo);
+            let uploadTask= storageRef.child(`Videos/${videoName}`).put(this.state.selectedVideo);
             const self = this;
 
             uploadTask.on('state_changed',

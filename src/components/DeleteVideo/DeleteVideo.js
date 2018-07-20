@@ -148,7 +148,7 @@ class DeleteVideo extends Component {
         let video2delete=  this.state.deleteVideoRoot;
         videoStorage= video2delete.replace(/\s/g,''); //deletes all blanks in string
 
-        var desertRef = storageRef.child(`videosInventory/${videoStorage}`);
+        var desertRef = storageRef.child(`Videos/${videoStorage}`);
 
         //eliminar el archivo y borrarlo destorage a db
         desertRef.delete().then(function() {
