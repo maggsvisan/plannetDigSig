@@ -47,7 +47,7 @@ class DeleteVideo extends Component {
     componentDidMount() {
         
         storageRef= firebase.storage().ref();
-        console.log("initialize!")
+        
         //version de youtube, su funciona
         //url_database= "https://firebasestorage.googleapis.com/v0/b/digitalsignage-acb79.appspot.com/o/imagenes%2Fscreen2%2FScreen1_(2018-6-14)?alt=media&token=f16c0515-95ab-4fe3-981d-724dfbc141b8"
 
@@ -81,12 +81,12 @@ class DeleteVideo extends Component {
             let newValRoot= snap.val();
             Object.keys(newValRoot).map((key, index) => {
                 defaultRootVideos =newValRoot[key]; //first videoName in list 
-                console.log("root defautl", defaultRootVideos);      
+                //console.log("root defautl", defaultRootVideos);      
             })    
         }).then((dataSnapshot) => {
             this.setState({deleteVideoRoot: defaultRootVideos.name});
         });
-        
+
         // set SET DEFAULT VALUES for first screen //
 
         // SET DYNAMIC DROPDOWNS //
@@ -222,7 +222,7 @@ class DeleteVideo extends Component {
         .on('value', (data) => {
           arrayVideos = [];
             let values = data.val();
-            console.log("values", values);
+            //console.log("values", values);
             this.setState({ videos: values }, () => {
              
               Object.keys(this.state.videos).map((key, index) => {

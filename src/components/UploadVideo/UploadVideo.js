@@ -191,14 +191,14 @@ class UploadVideo extends Component {
 
             else{
                  //push to inventory and update "Uploaded Video"
-                logFilesRef.child(`${screenIndex}`).push({ name: videoName3})
-                .on('child_added', function(snap) {
+                //logFilesRef.child(`${screenIndex}`).push({ name: videoName3})
+                //.on('child_added', function(snap) {
                         //videoName3= videoName3.replace(/\s/g,'');
-                        videoName3 = videoName3.replace("(", "_");
-                        videoName3 = videoName3.replace(")","_");
-                        videoName3 = videoName3.replace(/ /g,"_");
-                        uploaded_videos.child(`${screenIndex}`).update({ Trigger: 1, Video_Name: videoName3}); 
-                });
+                videoName3 = videoName3.replace("(", "_");
+                videoName3 = videoName3.replace(")","_");
+                videoName3 = videoName3.replace(/ /g,"_");
+                uploaded_videos.child(`${screenIndex}`).update({ Trigger: 1, Video_Name: videoName3}); 
+               // });
                 
                 alert(`Send to ${screenIndex}`);
                 window.location.reload();
@@ -206,7 +206,6 @@ class UploadVideo extends Component {
             
         }
        
-        
     }
 
     applyAll = () => {
@@ -250,7 +249,12 @@ class UploadVideo extends Component {
         fd.append('image', this.state.selectedVideo, this.state.selectedVideo.name);
         videoName= this.state.selectedVideo.name;
         videoNameDB= this.state.selectedVideo.name;
-        videoName= videoName.replace(/\s/g,'');
+        //videoName= videoName.replace(/\s/g,'');
+
+        videoName = videoName.replace("(", "_");
+        videoName = videoName.replace(")","_");
+        videoName = videoName.replace(/ /g,"_");
+
         videoSize= this.state.selectedVideo.size;
         videoSize= videoSize/1000000;
         videoSize= `${videoSize}MB`; 
