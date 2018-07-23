@@ -49,7 +49,7 @@ class ProofPlaying extends Component {
             let values = data.val();
             arrayScreens=[];
             this.setState({ screens: values }, () => {
-              Object.keys(this.state.screens).map((key, index) => {
+              Object.keys(this.state.screens).forEach((key, index) => {
                   arrayScreens.push({name: key, key:index}); 
                   this.setState({screenList: arrayScreens }); 
 

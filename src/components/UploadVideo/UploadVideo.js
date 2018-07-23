@@ -6,7 +6,6 @@ import './UploadVideo.css';
 import firebase from 'firebase';
 import 'firebase/database';
 import firebaseApp from '../../firebase/firebaseApp';
-import { DataSnapshot } from '@firebase/database';
 
 let storageRef;
 let uploaded_videos;
@@ -19,12 +18,8 @@ let initialVideos;
 let videoSize=0;
 let videoName3;
 let initialVideos2='video1';
-
-let arrayPerScreen = [];
-let arrayVideos = [];
 let arrayScreens= [];
 let gralInventory;
-let videoNameList=[];
 
 class UploadVideo extends Component {
     state = {
@@ -60,7 +55,7 @@ class UploadVideo extends Component {
               let values = data.val();
               this.setState({ videos: values }, () => {
                 videosGralInv= [];
-                Object.keys(this.state.videos).map((key, index) => {
+                Object.keys(this.state.videos).forEach((key, index) => {
                     initialVideos = this.state.videos[key];
                     videoName2= initialVideos.name;
                    
@@ -77,50 +72,30 @@ class UploadVideo extends Component {
         firebaseApp.database().ref(`General_Inventory/`) //first value for dropdown
         .orderByKey().limitToFirst(1).once('value', function(snap) {
             let newVal= snap.val();
-            Object.keys(newVal).map((key, index) => {
+            Object.keys(newVal).forEach((key, index) => {
                 initialVideos2 =newVal[key]; //first videoName in list
             })    
         }).then((dataSnapshot) => {
             this.setState({sendVideo: initialVideos2.name}); //value name form object in initialVideos2
         });
+ 
 
-        //when is Screen1 the first option
-        /*
-        firebaseApp.database().ref(`Inventory/${screenName2}/`) //first value for dropdowns, screen1
-        .orderByKey().limitToFirst(1).once('value', function(snap) {
-            let newVal= snap.val();
-            Object.keys(newVal).map((key, index) => {
-               
-                console.log("snap.val()",snap.val());
-                initialVideos2 =newVal[key]; //first videoName in list
-                
-                console.log("initial2UP", initialVideos2.name);  
-                //this.setState({sendVideo: initialVideos2});
-                console.log("screen to update", screenName2);
-               
-            })    
-        }).then((dataSnapshot) => {
-            this.setState({sendVideo: initialVideos2.name});
+        firebaseApp.database().ref(`Inventory`) //Dropdown screens from database
+        .on('value', (data) => {
+            let values = data.val();
+            
+            this.setState({ screens: values }, () => {
+            arrayScreens=[];
+            Object.keys(this.state.screens).forEach((key, index) => {
+                arrayScreens.push({name: key, key:index}); 
+                this.setState({screenList: arrayScreens }); 
+                }
+            );
         });
-        */
-        
 
-          firebaseApp.database().ref(`Inventory`) //Dropdown screens from database
-          .on('value', (data) => {
-              let values = data.val();
-             
-              this.setState({ screens: values }, () => {
-                arrayScreens=[];
-                Object.keys(this.state.screens).map((key, index) => {
-                    arrayScreens.push({name: key, key:index}); 
-                    this.setState({screenList: arrayScreens }); 
-                    }
-                );
-            });
-
-          }, (err) => {
-              console.log(err);
-          });  
+        }, (err) => {
+            console.log(err);
+        });  
 
     }
 
@@ -145,7 +120,6 @@ class UploadVideo extends Component {
     
 
     handleScreenChange = (name, value) => {
-        arrayVideos = [];
         this.setState({ screenName: value});
 
         screenName2 = value;
@@ -249,8 +223,6 @@ class UploadVideo extends Component {
         fd.append('image', this.state.selectedVideo, this.state.selectedVideo.name);
         videoName= this.state.selectedVideo.name;
         videoNameDB= this.state.selectedVideo.name;
-        //videoName= videoName.replace(/\s/g,'');
-
         videoName = videoName.replace("(", "_");
         videoName = videoName.replace(")","_");
         videoName = videoName.replace(/ /g,"_");

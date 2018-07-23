@@ -26,8 +26,6 @@ let arrayVideos= [];
 let initialVideos;
 let videoName2;
 let screenName2;
-let videoNameList= [];
-
 let promoLoopRef;
 let startDB;
 let endDB;
@@ -97,7 +95,7 @@ class PromoLoop extends Component {
             let values = data.val();
             arrayScreens=[];
            this.setState({ screens: values }, () => {
-              Object.keys(this.state.screens).map((key, index) => {
+              Object.keys(this.state.screens).forEach((key, index) => {
                   arrayScreens.push({name: key, key:index}); 
                   this.setState({screenList: arrayScreens }); 
 
@@ -116,7 +114,7 @@ class PromoLoop extends Component {
          firebaseApp.database().ref(`Inventory/${screenName2}/`) //first value for dropdowns, screen1
          .orderByKey().limitToFirst(1).once('value', function(snap) {
              let newVal= snap.val();
-             Object.keys(newVal).map((key, index) => {
+             Object.keys(newVal).forEach((key, index) => {
                  initialVideos2 =newVal[key]; //first videoName in list       
              })    
          }).then((dataSnapshot) => {
@@ -131,7 +129,7 @@ class PromoLoop extends Component {
               this.setState({ videos: values }, () => {
                 arrayVideos = [];
                 arrayScreens = [];
-                Object.keys(this.state.videos).map((key, index) => {
+                Object.keys(this.state.videos).forEach((key, index) => {
                     initialVideos = this.state.videos[key]
                     videoName2= initialVideos.name;
                     arrayVideos.push({name: videoName2, key:key});  
@@ -175,23 +173,17 @@ class PromoLoop extends Component {
                   this.setState({ videos: values }, () => {
                     arrayVideos = [];
                     arrayScreens = [];
-                    Object.keys(this.state.videos).map((key, index) => {
+                    Object.keys(this.state.videos).forEach((key, index) => {
                         initialVideos = this.state.videos[key]
                         videoName2= initialVideos.name;
                         arrayVideos.push({name: videoName2, key:key});  
                         this.setState({videoList: arrayVideos }) ; 
-
-                        //return arrayVideos;
                   }
                 );
                 });
               }, (err) => {
                   console.log(err);
               });
-
-
-    
-
         });
     }
 

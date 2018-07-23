@@ -4,11 +4,10 @@ import { Row, Button } from 'react-materialize';
 import Dropdown from '../Dropdown/Dropdown';
 import DropdownScreen from '../DropdownScreen/DropdownScreen'
 
-import firebase from 'firebase';
+//import firebase from 'firebase';
 import 'firebase/database';
 import firebaseApp from '../../firebase/firebaseApp';
 
-//concat mp4 format
 let startTime;
 let endTime;
 let startMin;
@@ -32,8 +31,6 @@ let videoNameDB;
 let commonVideos= [];
 let arrayVideos2;
 let initialVideos2;
-
-let response= [];
 const timeNumber = [];
 
 
@@ -93,13 +90,14 @@ class SchedulerContent extends Component {
         //get common dropdown
         inventoryRef.once("value").then(function(snapshot) {
             numberOfChildren=snapshot.numChildren();
-            let values2 = snapshot.val(); 
+            //let values2 = snapshot.val(); 
             arrayVideos2 = [];
 
             snapshot.forEach(function(childSnapshot) {
                 let newState= childSnapshot.val();
 
-                Object.keys(newState).map((key, index) => {
+                //Object.keys(newState).map((key, index) => {
+                Object.keys(newState).forEach((key, index) => {
                     initialVideos2 = newState[key] 
                     arrayVideos2.push(initialVideos2.name);
                     //console.log("arrayVideos2",arrayVideos2);
@@ -131,8 +129,7 @@ class SchedulerContent extends Component {
                 arrayVideos = [];
                 arrayScreens = [];
                 
-                Object.keys(values).map((key, index) => {
-
+                Object.keys(values).forEach((key, index) => {
                     initialVideos =values[key];
                     videoName2= initialVideos.name;
                     arrayVideos.push({name: videoName2, key:index});
@@ -150,7 +147,7 @@ class SchedulerContent extends Component {
             firebaseApp.database().ref(`Inventory/${screenName2}/`) //first value for dropdowns, screen1
             .orderByKey().limitToFirst(1).once('value', function(snap) {
                 let newVal= snap.val();
-                Object.keys(newVal).map((key, index) => {
+                Object.keys(newVal).forEach((key, index) => {
                     initialVideos =newVal[key]; //first videoName in list
                      
                 })    
@@ -164,7 +161,7 @@ class SchedulerContent extends Component {
               let values = data.val();
               this.setState({ screens: values }, () => {
                 arrayScreens=[];
-                Object.keys(this.state.screens).map((key, index) => {
+                Object.keys(this.state.screens).forEach((key, index) => {
                     arrayScreens.push({name: key, key:index}); 
                     this.setState({screenList: arrayScreens }); 
                   
@@ -219,7 +216,7 @@ class SchedulerContent extends Component {
                 
                 let values = data.val();
                 this.setState({ videos: values }, () => {
-                    Object.keys(this.state.videos).map((key, index) => {
+                    Object.keys(this.state.videos).forEach((key, index) => {
                         initialVideos = this.state.videos[key]
                         videoName2= initialVideos.name;
                         arrayVideos.push({name: videoName2, key:key});  
@@ -300,7 +297,7 @@ class SchedulerContent extends Component {
                         //console.log("default",this.state.schedules[i].video);
                         screen2Push= this.state.screenName;
                         const self = this;
-                        let videoName;
+                       
                         if (screen2Push === 'all' ){
 
                             if(self.state.schedules[i].video === "video 1"){
