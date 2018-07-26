@@ -312,7 +312,7 @@ class SchedulerContent extends Component {
                                     })
                                 }
                                 else{
-                                   alert("No videos on common")
+                                   alert("No videos in common")
                                   
                                 }
                             }
