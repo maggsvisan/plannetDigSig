@@ -70,10 +70,9 @@ class SchedulerContent extends Component {
         videos2: [],
         commonDropDown: [],
         showCommonDrop: false,
-        videoList2: [],
         schedules: [
             {
-                video: 'INTRO_PANTALLAS.mp4',
+                video: 'video1',
                 start: '00:00',
                 end: '00:00',
             },
@@ -152,7 +151,9 @@ class SchedulerContent extends Component {
                      
                 })    
             }).then((dataSnapshot) => {
-                this.setState({sendVideo: initialVideos.name});
+                this.setState({sendVideo: initialVideos.name}, ()=>{
+                    console.log("set value", this.state.sendVideo);
+                });
             });
         
 
@@ -189,7 +190,7 @@ class SchedulerContent extends Component {
 
         this.setState(prevState => ({
             schedules: [...schedules, {
-                video: 'INTRO_PANTALLAS.mp4',
+                video: 'video1',
                 start: 0,
                 end: 0,
             }]
@@ -197,15 +198,20 @@ class SchedulerContent extends Component {
     }
 
     handleScheduleChange = (index, name, value) => {
-        //console.log(index);
+        console.log("index",index);
+        console.log("name",name);
+        console.log("value",value);
+
         const schedules = this.state.schedules;
         const scheduleToModify = schedules[index];
 
         scheduleToModify[name] = value;
+        console.log("scheduleToModify[name]",scheduleToModify[name]);
         schedules[index] = scheduleToModify;
-        
+        console.log(" schedules[index]", schedules[index]);
     }
 
+   
     handleScreenChange = (name, value) => {
         
         this.setState({ screenName: value }, () => { //change videos to show in dropdown
@@ -230,6 +236,23 @@ class SchedulerContent extends Component {
             });
 
             this.setState({showCommonDrop:false});
+
+            /* SI FUNCIONAAAA
+            firebaseApp.database().ref(`Inventory/${value}/`) //first value for dropdowns, screen1
+            .orderByKey().limitToFirst(1).once('value', function(snap) {
+                let newVal= snap.val();
+                console.log("newVal",newVal);
+                Object.keys(newVal).forEach((key, index) => {
+                    initialVideos =newVal[key]; //first videoName in list
+                    console.log("initialVideos.name", initialVideos.name);
+                     
+                })    
+            }).then((dataSnapshot) => {
+                this.setState({sendVideo: initialVideos.name}, ()=>{
+                    console.log("set valueAgain", this.state.sendVideo);
+                });
+            });
+            */
         });
     
     }
@@ -300,9 +323,8 @@ class SchedulerContent extends Component {
                        
                         if (screen2Push === 'all' ){
 
-                            if(self.state.schedules[i].video === "video 1"){
+                            if(self.state.schedules[i].video === "video1"){
                                 console.log('updateNAme');
-                                videoNameDB= self.state.sendVideo;
                             }
 
                             else{
@@ -323,38 +345,45 @@ class SchedulerContent extends Component {
                             });
     
                             alert('Send to all screens');
-                            window.location.reload();
+                            //window.location.reload();
 
                             })
                             
                         }   
 
                         else{
-                            screen2Push= screen2Push.replace(" ",""); 
                             
-                            if(self.state.schedules[i].video === "video 1"){
+                            if(self.state.schedules[i].video === "video1"){
                                 console.log('updateNAme');
-                                videoNameDB= self.state.sendVideo;
+                                firebaseApp.database().ref(`Inventory/${self.state.screenName}/`) //first value for dropdowns, screen1
+                                .orderByKey().limitToFirst(1).once('value', function(snap) {
+                                    let newVal= snap.val();
+                                    console.log("newVal",newVal);
+                                    Object.keys(newVal).forEach((key, index) => {
+                                        initialVideos =newVal[key]; //first videoName in list
+                                        console.log("initialVideos.name", initialVideos.name);
+                                        videoNameDB=initialVideos.name;
+                                    })    
+                                })
                             }
 
                             else{
+                                console.log("entra a else");
                                 videoNameDB=self.state.schedules[i].video;
                             }
                             
-                            videoNameDB=self.state.schedules[i].video;
                             console.log("videoNameDB",videoNameDB);
                             videoNameDB= videoNameDB.replace(/\s/g,'');
                             //schedulerRef.on('value', function(snapshot){
                                
-                                console.log(`self.state.schedules[${i}].video`,self.state.schedules[i].video);
                                 schedulerRef.child(`${self.state.screenName}/${daySelected}/schedule${i+1}`).update({
-                                    "VideoName": self.state.schedules[i].video,
+                                    "VideoName": videoNameDB,
                                     "startTime": self.state.schedules[i].start,
                                     "endTime":  self.state.schedules[i].end,
                                 });            
                         
                                 alert(`Send to ${self.state.screenName}`);
-                                window.location.reload();
+                                //window.location.reload();
 
                            // })
 
