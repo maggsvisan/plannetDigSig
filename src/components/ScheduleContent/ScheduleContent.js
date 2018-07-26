@@ -57,17 +57,13 @@ for (let i = 0; i <= 23; i++) {
 class SchedulerContent extends Component {
 
     state = {
-        scheduleValue: '',
         dayOfWeek: '',
         videos: '',
-        indexState: '',
         value: '',
         screenName: 'Screen1',
-        listOfSchedule: [],
         screens: [],
         screenList: [],
         videoList: [],
-        videos2: [],
         commonDropDown: [],
         showCommonDrop: false,
         schedules: [
@@ -89,17 +85,15 @@ class SchedulerContent extends Component {
         //get common dropdown
         inventoryRef.once("value").then(function(snapshot) {
             numberOfChildren=snapshot.numChildren();
-            //let values2 = snapshot.val(); 
             arrayVideos2 = [];
 
             snapshot.forEach(function(childSnapshot) {
                 let newState= childSnapshot.val();
 
-                //Object.keys(newState).map((key, index) => {
                 Object.keys(newState).forEach((key, index) => {
                     initialVideos2 = newState[key] 
                     arrayVideos2.push(initialVideos2.name);
-                    //console.log("arrayVideos2",arrayVideos2);
+                   
                     }
                 );
             });
@@ -115,6 +109,7 @@ class SchedulerContent extends Component {
                     commonVideos.push({name: i, key:k});
                     console.log(`the count is ${k}`,commonVideos);
                 }
+               
             });
         },(err) => {
             console.log(err);
@@ -124,7 +119,7 @@ class SchedulerContent extends Component {
         firebaseApp.database().ref(`Inventory/${screenName2}/`) // videos per screen
         .on('value', (data) => {
               let values = data.val();
-             // this.setState({ videos: values }, () => {
+            
                 arrayVideos = [];
                 arrayScreens = [];
                 
@@ -136,7 +131,7 @@ class SchedulerContent extends Component {
                  
                 }
             );
-            //});
+            
           }, (err) => {
               console.log(err);
           });
@@ -151,13 +146,11 @@ class SchedulerContent extends Component {
                      
                 })    
             }).then((dataSnapshot) => {
-                this.setState({sendVideo: initialVideos.name}, ()=>{
-                    console.log("set value", this.state.sendVideo);
-                });
+                this.setState({sendVideo: initialVideos.name});
             });
         
 
-          firebaseApp.database().ref(`Inventory`) //screens
+          firebaseApp.database().ref(`Inventory`) //screen dropdown
           .on('value', (data) => {
               let values = data.val();
               this.setState({ screens: values }, () => {
@@ -165,7 +158,6 @@ class SchedulerContent extends Component {
                 Object.keys(this.state.screens).forEach((key, index) => {
                     arrayScreens.push({name: key, key:index}); 
                     this.setState({screenList: arrayScreens }); 
-                  
                }
             );
             });
@@ -176,10 +168,9 @@ class SchedulerContent extends Component {
     }
 
     selectAll = () => { //Select all screens!
-        console.log("Select all screens!");
         alert("Selected all screens")
         this.setState({screenName: "all"});
-        console.log("the commong list is", this.state.commonDropDown)
+        //console.log("the commong list is", this.state.commonDropDown)
         this.setState({showCommonDrop:true}); 
     }
 
@@ -198,17 +189,11 @@ class SchedulerContent extends Component {
     }
 
     handleScheduleChange = (index, name, value) => {
-        console.log("index",index);
-        console.log("name",name);
-        console.log("value",value);
-
         const schedules = this.state.schedules;
         const scheduleToModify = schedules[index];
 
         scheduleToModify[name] = value;
-        console.log("scheduleToModify[name]",scheduleToModify[name]);
         schedules[index] = scheduleToModify;
-        console.log(" schedules[index]", schedules[index]);
     }
 
    
@@ -236,23 +221,6 @@ class SchedulerContent extends Component {
             });
 
             this.setState({showCommonDrop:false});
-
-            /* SI FUNCIONAAAA
-            firebaseApp.database().ref(`Inventory/${value}/`) //first value for dropdowns, screen1
-            .orderByKey().limitToFirst(1).once('value', function(snap) {
-                let newVal= snap.val();
-                console.log("newVal",newVal);
-                Object.keys(newVal).forEach((key, index) => {
-                    initialVideos =newVal[key]; //first videoName in list
-                    console.log("initialVideos.name", initialVideos.name);
-                     
-                })    
-            }).then((dataSnapshot) => {
-                this.setState({sendVideo: initialVideos.name}, ()=>{
-                    console.log("set valueAgain", this.state.sendVideo);
-                });
-            });
-            */
         });
     
     }
@@ -317,76 +285,91 @@ class SchedulerContent extends Component {
                     }
 
                     else {
-                        //console.log("default",this.state.schedules[i].video);
+                        
                         screen2Push= this.state.screenName;
                         const self = this;
-                       
+                        videoNameDB="";
                         if (screen2Push === 'all' ){
 
                             if(self.state.schedules[i].video === "video1"){
-                                console.log('updateNAme');
+                                if(commonVideos.length > 0){
+                                    videoNameDB= commonVideos[0].name; 
+                                    schedulerRef.once('value', function(snapshot){
+                                        numberOfChildren=snapshot.numChildren();
+                                        let j=0;
+                                        videoNameDB= videoNameDB.replace(/\s/g,'');
+                                        snapshot.forEach(function(snap){
+                                            j=j+1;
+                                            schedulerRef.child(`Screen${j}/${daySelected}/schedule${i+1}`).update({
+                                                "VideoName": videoNameDB,
+                                                "startTime": self.state.schedules[i].start,
+                                                "endTime":  self.state.schedules[i].end, 
+                                            });            
+                                        });
+                
+                                        alert('Send to all screens');
+                                        window.location.reload();
+                                    })
+                                }
+                                else{
+                                   alert("No videos on common")
+                                  
+                                }
                             }
 
                             else{
                                 videoNameDB=self.state.schedules[i].video;
+
+                                schedulerRef.once('value', function(snapshot){
+                                    numberOfChildren=snapshot.numChildren();
+                                    let j=0;
+                                    videoNameDB= videoNameDB.replace(/\s/g,'');
+                                    snapshot.forEach(function(snap){
+                                        j=j+1;
+                                        schedulerRef.child(`Screen${j}/${daySelected}/schedule${i+1}`).update({
+                                            "VideoName": videoNameDB,
+                                            "startTime": self.state.schedules[i].start,
+                                            "endTime":  self.state.schedules[i].end, 
+                                        });            
+                                    });
+            
+                                    alert('Send to all screens');
+                                    window.location.reload();
+        
+                                })
                             }
-
-                            schedulerRef.once('value', function(snapshot){
-                            numberOfChildren=snapshot.numChildren();
-                            let j=0;
-                            videoNameDB= videoNameDB.replace(/\s/g,'');
-                            snapshot.forEach(function(snap){
-                                j=j+1;
-                                schedulerRef.child(`Screen${j}/${daySelected}/schedule${i+1}`).update({
-                                    "VideoName": videoNameDB,
-                                    "startTime": self.state.schedules[i].start,
-                                    "endTime":  self.state.schedules[i].end, 
-                                });            
-                            });
-    
-                            alert('Send to all screens');
-                            //window.location.reload();
-
-                            })
-                            
+ 
                         }   
 
                         else{
                             
                             if(self.state.schedules[i].video === "video1"){
-                                console.log('updateNAme');
+                                
                                 firebaseApp.database().ref(`Inventory/${self.state.screenName}/`) //first value for dropdowns, screen1
                                 .orderByKey().limitToFirst(1).once('value', function(snap) {
                                     let newVal= snap.val();
-                                    console.log("newVal",newVal);
+                                   
                                     Object.keys(newVal).forEach((key, index) => {
                                         initialVideos =newVal[key]; //first videoName in list
-                                        console.log("initialVideos.name", initialVideos.name);
                                         videoNameDB=initialVideos.name;
                                     })    
                                 })
                             }
 
                             else{
-                                console.log("entra a else");
                                 videoNameDB=self.state.schedules[i].video;
                             }
                             
-                            console.log("videoNameDB",videoNameDB);
                             videoNameDB= videoNameDB.replace(/\s/g,'');
-                            //schedulerRef.on('value', function(snapshot){
                                
-                                schedulerRef.child(`${self.state.screenName}/${daySelected}/schedule${i+1}`).update({
-                                    "VideoName": videoNameDB,
-                                    "startTime": self.state.schedules[i].start,
-                                    "endTime":  self.state.schedules[i].end,
-                                });            
-                        
-                                alert(`Send to ${self.state.screenName}`);
-                                //window.location.reload();
+                            schedulerRef.child(`${self.state.screenName}/${daySelected}/schedule${i+1}`).update({
+                                "VideoName": videoNameDB,
+                                "startTime": self.state.schedules[i].start,
+                                "endTime":  self.state.schedules[i].end,
+                            });            
 
-                           // })
-
+                            alert(`Send to ${self.state.screenName}`);
+                            window.location.reload();
                         }
                     }
                 }
@@ -446,7 +429,6 @@ class SchedulerContent extends Component {
                                                     handleChange={this.handleScheduleChange}
                                                     name="video"
                                                     index={index}
-                                                    //items={this.state.videoList}
                                                     items= {commonVideos}
                                                 />            
                                         </div>
