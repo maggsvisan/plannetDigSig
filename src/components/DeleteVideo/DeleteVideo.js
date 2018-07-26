@@ -7,10 +7,8 @@ import 'firebase/database';
 import firebaseApp from '../../firebase/firebaseApp';
 
 let storageRef;
-
 let logFilesRef;
 let gralInventory;
-//let url_database;
 let screenName2;
 let initialVideos;
 let arrayScreens= [];
@@ -144,8 +142,6 @@ class DeleteVideo extends Component {
         videoStorage = video2delete.replace("(", "_");
         videoStorage = videoStorage.replace(")","_");
         videoStorage = videoStorage.replace(/ /g,"_");
-        console.log("videoStorage", videoStorage);
-
         var desertRef = storageRef.child(`Videos/${videoStorage}`);
 
         //eliminar el archivo y borrarlo destorage a db
@@ -207,7 +203,6 @@ class DeleteVideo extends Component {
         .on('value', (data) => {
           arrayVideos = [];
             let values = data.val();
-            //console.log("values", values);
             this.setState({ videos: values }, () => {
              
               Object.keys(this.state.videos).forEach((key, index) => {

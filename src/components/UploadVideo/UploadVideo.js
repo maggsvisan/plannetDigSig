@@ -31,7 +31,7 @@ class UploadVideo extends Component {
         percent: null ,
         videos: [],
         videoList: [],
-        gralInventory: [], //nuevo
+        gralInventory: [], 
         video2: [],
         videoListPerScreen: [],
         sendVideo: null,
@@ -109,7 +109,6 @@ class UploadVideo extends Component {
             .on('value', (data) => {
                 let values = data.val();
                 this.setState({ videos: values });
-                console.log("originalValues",values)
 
             }, (err) => {
                 console.log(err);
@@ -117,18 +116,12 @@ class UploadVideo extends Component {
         
     }
    
-    
-
     handleScreenChange = (name, value) => {
         this.setState({ screenName: value});
-
-        screenName2 = value;
-        screenName2= screenName2.replace(" ",""); 
     }
 
     handleVideoChange = (name, value) => {
         this.setState({ sendVideo: value});
-        console.log("sendVideo",value);
     }
 
 
@@ -164,15 +157,10 @@ class UploadVideo extends Component {
             }
 
             else{
-                 //push to inventory and update "Uploaded Video"
-                //logFilesRef.child(`${screenIndex}`).push({ name: videoName3})
-                //.on('child_added', function(snap) {
-                        //videoName3= videoName3.replace(/\s/g,'');
                 videoName3 = videoName3.replace("(", "_");
                 videoName3 = videoName3.replace(")","_");
                 videoName3 = videoName3.replace(/ /g,"_");
                 uploaded_videos.child(`${screenIndex}`).update({ Trigger: 1, Video_Name: videoName3}); 
-               // });
                 
                 alert(`Send to ${screenIndex}`);
                 window.location.reload();
@@ -183,7 +171,6 @@ class UploadVideo extends Component {
     }
 
     applyAll = () => {
-        //let numberOfChildren;
         if (this.state.sendVideo === null){
             alert("Browse a video to upload")
         }
@@ -191,7 +178,6 @@ class UploadVideo extends Component {
         else{
             videoName3= this.state.sendVideo;
             logFilesRef.once('value', function(snapshot) {
-               //numberOfChildren= snapshot.numChildren(); //get number of immediate children
                let i=0
                snapshot.forEach(function(snap){
                     i=i+1;

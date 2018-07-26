@@ -46,23 +46,18 @@ class PowerSettings extends Component {
 
     handleScreenChange = (name, value) => {
         this.setState({ screenName : value });
-        console.log("value", value);
     }
     
     powerON = () => {
         this.setState({ status : 1 });
-        console.log("value", this.state.status);
     }
 
     powerOFF = () => {
         this.setState({ status : 0 });
-        console.log("value", this.state.status);
     }
 
     sendToDb = () => {
             this.setState(prevState => {    
-            console.log("tv status: ",this.state.status)
-            console.log("the screenName is: ",this.state.screenName);
             screen2Push= this.state.screenName;
             
             if(this.state.status === ''){
@@ -111,11 +106,9 @@ class PowerSettings extends Component {
                     alert(`ALL SCREENS ON` );
                 }
                 
-                //let numberOfChildren;
                 let i=0;
 
                 powerSetingsRef.once('value', function(snapshot) {
-                    //numberOfChildren= snapshot.numChildren(); //get number of immediate children
                     snapshot.forEach(function(snap){
                         i=i+1;
                         powerSetingsRef.child(`Screen${i}`).update({ "Trigger": 1,

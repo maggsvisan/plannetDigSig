@@ -98,8 +98,6 @@ class PromoLoop extends Component {
               Object.keys(this.state.screens).forEach((key, index) => {
                   arrayScreens.push({name: key, key:index}); 
                   this.setState({screenList: arrayScreens }); 
-
-                  //return arrayScreens;
              }
           );
          });
@@ -122,7 +120,6 @@ class PromoLoop extends Component {
          });
          // set SET DEFAULT VALUES for first screen //
 
-
         firebaseApp.database().ref(`Inventory/${screenName2}/`) // videos per screen
         .on('value', (data) => {
               let values = data.val();
@@ -133,8 +130,6 @@ class PromoLoop extends Component {
                     initialVideos = this.state.videos[key]
                     videoName2= initialVideos.name;
                     arrayVideos.push({name: videoName2, key:key});  
-                    //this.setState({videoList: arrayVideos }) ; 
-
                     return arrayVideos;
               }
             );
@@ -147,7 +142,6 @@ class PromoLoop extends Component {
 
     handleVideoChange = (name, value) => {
         this.setState({ selectedVideo: value});
-    
     }
 
     handleScheduleChange = (index, name, value) => {
@@ -178,7 +172,7 @@ class PromoLoop extends Component {
                         videoName2= initialVideos.name;
                         arrayVideos.push({name: videoName2, key:key});  
                         this.setState({videoList: arrayVideos }) ; 
-                  }
+                    }
                 );
                 });
               }, (err) => {
@@ -221,18 +215,12 @@ class PromoLoop extends Component {
 
     
             else{
-                //let numberOfChildren;
                 let i=0;
-                
                 startDB= this.state.schedules[0].start;
                 endDB= this.state.schedules[0].end;
                 video2Push= this.state.selectedVideo;
 
-                console.log(startDB);
-                console.log(endDB);
-
                 promoLoopRef.once('value', function(snapshot) {
-                    //numberOfChildren= snapshot.numChildren(); //get number of immediate children
                     snapshot.forEach(function(snap){
                         i=i+1;
                         promoLoopRef.child(`Screen${i}`).update({
@@ -292,7 +280,6 @@ class PromoLoop extends Component {
                 endDB= this.state.schedules[0].end;
 
                 screen2Push= screen2Push.replace(" ",""); 
-                //video2Push= video2Push.replace(/\s/g,'');
                 video2Push = video2Push.replace("(", "_");
                 video2Push = video2Push.replace(")","_");
                 video2Push = video2Push.replace(/ /g,"_");

@@ -55,7 +55,7 @@ class PromoLoop extends Component {
 
         const dayIndex = daysName.find(day => day.name === daySelected).key;
         screenName2= screenName2.replace(" ",""); 
-        //console.log(`Scheduler/${screenName2}/${dayIndex}`);
+       
         firebaseApp.database().ref(`Scheduler/${screenName2}/${dayIndex}`)
             .on('value', (data) => {
                 let values = data.val();

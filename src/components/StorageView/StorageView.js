@@ -8,7 +8,6 @@ import firebaseApp from '../../firebase/firebaseApp';
 let initialVideos;
 let videoName;
 let videoSize;
-//let screenName2;
 let arrayVideos = [];
 let videoSize2;
 let videoSizeInt;
@@ -26,12 +25,10 @@ class StorageView extends Component {
     }
 
     componentDidMount() {   
-       
-        //screenName2= 'Screen1'
         videoName = "";
 
-          firebaseApp.database().ref(`General_Inventory/`)
-          .on('value', (data) => {
+        firebaseApp.database().ref(`General_Inventory/`)
+        .on('value', (data) => {
               let values = data.val();
               this.setState({ videos: values }, () => {
                 arrayVideos = [];
@@ -61,15 +58,12 @@ class StorageView extends Component {
          
             });
            
-          }, (err) => {
+        }, (err) => {
               console.log(err);
-          });     
+        });     
          
     }
 
-    
-
- 
     render() {
         return (
             <div className="PromoLoop" >
@@ -81,7 +75,7 @@ class StorageView extends Component {
                             <Modal 
                             header='Modal Header'
                             trigger={<Button waves='light'>Help!<Icon right> help </Icon></Button>}>
-                            <p>Lorem ipsum dolor sit agffgfgfgdgfgfgfgfgmet, consectetur adipiscing elit, sed do eiusmod tempor
+                            <p>Lorem ipsum dolor sit agmet, consectetur adipiscing elit, sed do eiusmod tempor
                                 incididunt ut labore et dolore magna aliqua.</p>
                             </Modal>
                     </span>

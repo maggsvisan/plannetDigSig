@@ -49,13 +49,7 @@ class App extends Component {
           <h5>Change your screen's content from a web application</h5>
         </div>
 
-        {this.state.user ? (<Toolbar 
-          updateAnnouncement={this.updateAnnouncement}
-          updateLoopPromo={this.updateLoopPromo}
-          updatePowerSettings= {this.updatePowerSettings}
-          updateScheduler= {this.updateScheduler}
-          showSchedules= {this.showSchedules}
-        />) : (<Login />)}
+        { this.state.user ? (<Toolbar />) : (<Login />)}
 
       </div>
 

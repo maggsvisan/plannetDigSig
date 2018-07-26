@@ -3,9 +3,7 @@ import './Announcements.css';
 import { Button, Modal, Icon, Table } from 'react-materialize';
 import DropdownScreen from '../DropdownScreen/DropdownScreen';
 import Dropdown from '../Dropdown/Dropdown';
-
 //import ReactPlayer from 'react-player';  este es para el video de youtube
-
 import 'firebase/database';
 import firebaseApp from '../../firebase/firebaseApp';
 
@@ -21,7 +19,6 @@ let IntStartMin;
 let IntEndtHr;
 let IntEndMin;
 let name2render;
-//let videoRender;
 let arrayScreens= [];
 let arrayAnnoun =[];
 let values2;
@@ -159,22 +156,21 @@ class Announcements extends Component {
     }
 
     changeTrigger2 = () =>{  //turns off the "enable aler"
-        //let numberOfChildren;
         this.setState(prevState => {
             screen2Push= this.state.screenName;
             
             if (screen2Push === "all" ){
                 let i=0;
                 updateAnnounRef.once('value', function(snapshot){
-                    //numberOfChildren=snapshot.numChildren();
-                        snapshot.forEach(function(snap){
-                            i=i+1;
-                            console.log(`Screen${i}`);
-                            updateAnnounRef.child(`Screen${i}`).update({"Trigger2": 0 });  
-                        });
+                  
+                    snapshot.forEach(function(snap){
+                        i=i+1;
+                        console.log(`Screen${i}`);
+                        updateAnnounRef.child(`Screen${i}`).update({"Trigger2": 0 });  
+                    });
 
-                        alert('Disable to all screens');
-                        window.location.reload();
+                    alert('Disable to all screens');
+                    window.location.reload();
                 })
                    
             }
@@ -189,7 +185,6 @@ class Announcements extends Component {
             }
         });
 
-        //window.location.reload();
     }
 
     sendApplyNow = () => {
@@ -201,7 +196,7 @@ class Announcements extends Component {
             startDB= this.state.schedules[0].start;
             endDB= this.state.schedules[0].end;
             screen2Push= this.state.screenName;
-            console.log(screen2Push);
+          
     
             if (name2render === ""){
                 alert("Fill all the inputs!");
@@ -217,7 +212,7 @@ class Announcements extends Component {
                     updateAnnounRef.once('value', function(snapshot){
                         snapshot.forEach(function(snap){
                             i=i+1;
-                            console.log(`Screen${i}`);
+                            
                             updateAnnounRef.child(`Screen${i}`).update({
                                 "Text2": inputText2,
                                 "VideoName2": video2Push,
@@ -269,12 +264,10 @@ class Announcements extends Component {
                     .on('value', (data) => {
                         let values = data.val();
                        
-
                         if(values !== 0){
                             firebaseApp.database().ref(`Announcements/${screenName2}`)
                             .on('value', (data) => {
                                 values2 = data.val();
-                                //console.log("values", values2);
                                 this.setState({ schedulesShow: values2 });
                                 this.setState({ showResults: true});
 
@@ -294,7 +287,6 @@ class Announcements extends Component {
                                 .on('value', (data) => {
                                 
                                 let values4 = data.val();
-                                console.log("values", values4);
                                 this.setState({ schedulesShow: values4 });
                                 this.setState({ showResults2: true});
 
@@ -322,8 +314,6 @@ class Announcements extends Component {
         video2Push= this.state.schedules[0].video;
         startDB= this.state.schedules[0].start;
         endDB= this.state.schedules[0].end;
-
-        console.log("screen2push",screen2Push);
        
         if (name2render === ""){
             alert("Fill all the inputs!")
@@ -410,7 +400,6 @@ class Announcements extends Component {
     }
 
     selectAll = () => {
-        console.log("Select all screens!");
         alert("Selected all screens")
         this.setState({screenName: "all"});
     }
