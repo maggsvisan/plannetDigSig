@@ -40,6 +40,7 @@ class DeleteVideo extends Component {
     }
 
     handleVideoRootChange = (name, value) => {
+        console.log("dropdownDEl", this.state.deleteVideoRoot);
         this.setState({ deleteVideoRoot: value});
     }
     
@@ -140,7 +141,10 @@ class DeleteVideo extends Component {
     deleteRootDirectory = () =>{
         let videoStorage;
         let video2delete=  this.state.deleteVideoRoot;
-        videoStorage= video2delete.replace(/\s/g,''); //deletes all blanks in string
+        videoStorage = video2delete.replace("(", "_");
+        videoStorage = videoStorage.replace(")","_");
+        videoStorage = videoStorage.replace(/ /g,"_");
+        console.log("videoStorage", videoStorage);
 
         var desertRef = storageRef.child(`Videos/${videoStorage}`);
 

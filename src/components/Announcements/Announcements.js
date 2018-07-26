@@ -59,7 +59,7 @@ class Announcements extends Component {
         name: '',
         schedules: [
             {
-                video: 'Welcome',
+                video: 'Birthday.mp4',
                 start: '00:00',
                 end: '00:00',
             },

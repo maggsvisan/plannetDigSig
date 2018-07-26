@@ -73,7 +73,7 @@ class SchedulerContent extends Component {
         videoList2: [],
         schedules: [
             {
-                video: 'video 1',
+                video: 'INTRO_PANTALLAS.mp4',
                 start: '00:00',
                 end: '00:00',
             },
@@ -189,7 +189,7 @@ class SchedulerContent extends Component {
 
         this.setState(prevState => ({
             schedules: [...schedules, {
-                video: 'video 1',
+                video: 'INTRO_PANTALLAS.mp4',
                 start: 0,
                 end: 0,
             }]
@@ -342,10 +342,13 @@ class SchedulerContent extends Component {
                             }
                             
                             videoNameDB=self.state.schedules[i].video;
+                            console.log("videoNameDB",videoNameDB);
                             videoNameDB= videoNameDB.replace(/\s/g,'');
-                            schedulerRef.once('value', function(snapshot){
+                            //schedulerRef.on('value', function(snapshot){
+                               
+                                console.log(`self.state.schedules[${i}].video`,self.state.schedules[i].video);
                                 schedulerRef.child(`${self.state.screenName}/${daySelected}/schedule${i+1}`).update({
-                                    "VideoName":videoNameDB,
+                                    "VideoName": self.state.schedules[i].video,
                                     "startTime": self.state.schedules[i].start,
                                     "endTime":  self.state.schedules[i].end,
                                 });            
@@ -353,7 +356,8 @@ class SchedulerContent extends Component {
                                 alert(`Send to ${self.state.screenName}`);
                                 window.location.reload();
 
-                            })
+                           // })
+
                         }
                     }
                 }
