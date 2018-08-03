@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Button, Modal, Icon } from 'react-materialize';
 import DropdownScreen from '../DropdownScreen/DropdownScreen';
+import TimerMixin from 'react-timer-mixin';
 
 import './QuickViewSchedule.css';
 import firebaseApp from '../../firebase/firebaseApp';
@@ -16,8 +17,13 @@ const daysName = [
 ];
 
 let arrayScreens= [];
+let screenName2;
+let dayIndex;
+let schedulerRef;
+let arraySchedules= [];
 
-class PromoLoop extends Component {
+
+class QuickViewSchedule extends Component {
 
     state = {
         screenName: 'Screen 1',
@@ -28,7 +34,15 @@ class PromoLoop extends Component {
         screens: []
     }
 
+   
     componentDidMount() {
+        TimerMixin.setTimeout(
+            () => { console.log('I do not leak!'); },
+            5000
+        );
+        
+        schedulerRef= firebaseApp.database().ref().child("Scheduler");
+        arraySchedules= [];
 
         firebaseApp.database().ref(`Inventory`) //screens
         .on('value', (data) => {
@@ -49,19 +63,52 @@ class PromoLoop extends Component {
     }
 
     showSchedules = () => {
+        arraySchedules= [];
         this.setState({ showResults: true});
         const daySelected= this.state.daySelected;
-        let screenName2 = this.state.screenName;
+        screenName2 = this.state.screenName;
 
-        const dayIndex = daysName.find(day => day.name === daySelected).key;
+        dayIndex = daysName.find(day => day.name === daySelected).key;
         screenName2= screenName2.replace(" ",""); 
        
         firebaseApp.database().ref(`Scheduler/${screenName2}/${dayIndex}`)
             .on('value', (data) => {
                 let values = data.val();
-                this.setState({ schedules: values });
+                console.log("schedule values", values);
 
-            }, (err) => {
+                console.log("the videoname is",values.schedule1);
+
+                Object.keys(values).forEach((key, index) => {
+                    let theValues;
+                    theValues= values[key];
+                    console.log("Key",theValues); 
+                    console.log("videoName", theValues.VideoName); 
+
+                    if(theValues.VideoName !== "0"){
+                        console.log(`entra ${theValues.VideoName}`)
+                        let videoPush= theValues.VideoName;
+                        let startPush= theValues.startTime;
+                        let endPush= theValues.endTime;
+                        let keyPush= key.slice(-1);
+
+                        console.log("THE KEY TO PUSH",keyPush);
+                        
+                        console.log("videoPush",videoPush);
+                        console.log("videoPush",startPush);
+                        console.log("videoPush",endPush);
+                        //this.setState({ schedules: values });
+                        arraySchedules.push({name:videoPush, startTime: startPush, endTime:endPush, scheduleKey:keyPush , key: key})
+                         
+                    }
+                    
+                })
+                //this.setState({ schedules: values });
+                console.log("to render",arraySchedules);
+                this.setState({ schedules: arraySchedules });
+
+            }
+            
+            , (err) => {
                 console.log(err);
             });
     }
@@ -77,6 +124,26 @@ class PromoLoop extends Component {
 
     handleChangeToAll = () => {
         this.setState({ screenName: "all" });
+    }
+
+    removeSchedule = (theKey) => {
+        arraySchedules=[];
+
+        firebaseApp.database().ref(`Scheduler/${screenName2}/${dayIndex}/schedule${theKey}`)
+        .on('value', (data) => {
+            let values2 = data.val();        
+            schedulerRef.child(`${screenName2}/${dayIndex}/schedule${theKey}`).update({
+                "VideoName": '0',
+                "startTime": '0',
+                "endTime": '0', 
+            }).then(()=>{
+                window.location.reload();
+            })
+        }, (err) => {
+            console.log(err);
+        });
+
+        
     }
 
     renderObject = (values) => {
@@ -136,6 +203,7 @@ class PromoLoop extends Component {
                                 <Table className="quickTable">
                                     <thead>
                                         <tr>
+                                            <th> </th>
                                             <th> Schedule Name</th>
                                             <th>Video Name</th>
                                             <th>Start Time</th>
@@ -146,9 +214,19 @@ class PromoLoop extends Component {
                                     <tbody>
                                         {
                                             Object.entries(this.state.schedules).map(([key, schedule]) => (
+                                                
                                                 <tr key={key}>
-                                                    <td> {key} </td>
-                                                    <td> {schedule.VideoName} </td>
+                                                    <td>  
+                                                    <Button
+                                                            onClick={() => this.removeSchedule(schedule.scheduleKey)}
+                                                            type="submit"
+                                                            value="Submit"
+                                                        >
+                                                            Remove
+                                                        </Button>
+                                                    </td>
+                                                    <td> {schedule.scheduleKey} </td>
+                                                    <td> {schedule.name} </td>
                                                     <td> {schedule.startTime} </td>
                                                     <td> {schedule.endTime} </td>
                                                 </tr>
@@ -180,7 +258,7 @@ class PromoLoop extends Component {
         )
     }
 }
-export default PromoLoop;
+export default QuickViewSchedule;
 
 
 

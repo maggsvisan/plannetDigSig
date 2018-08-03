@@ -69,6 +69,7 @@ for (let i=0; i <= 23 ; i++){
 }
 
 
+
 class PromoLoop extends Component {
 
     state = {
