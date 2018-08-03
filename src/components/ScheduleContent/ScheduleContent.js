@@ -339,7 +339,7 @@ class SchedulerContent extends Component {
                                         });
                 
                                         alert('Send to all screens');
-                                       // window.location.reload();
+                                        window.location.reload();
                                     })
                                 }
                                 else{
@@ -368,7 +368,7 @@ class SchedulerContent extends Component {
                                     });
             
                                     alert('Send to all screens');
-                                  //  window.location.reload();
+                                   window.location.reload();
         
                                 })
                             }
