@@ -321,9 +321,7 @@ class SchedulerContent extends Component {
                         videoNameDB="";
                        
                         if (screen2Push === 'all' ){
-                            console.log("entra aqui")
-                        }
-                            /*
+                           
                             if(self.state.schedules[i].video === "video1"){
                                 if(commonVideos.length > 0){
                                     videoNameDB= commonVideos[0].name; 
@@ -333,7 +331,7 @@ class SchedulerContent extends Component {
                                         videoNameDB= videoNameDB.replace(/\s/g,'');
                                         snapshot.forEach(function(snap){
                                             j=j+1;
-                                            schedulerRef.child(`Screen${j}/${daySelected}/schedule${i+1}`).update({
+                                            schedulerRef.child(`Screen${j}/${daySelected}/schedule${sendSelectedSchedule}`).update({
                                                 "VideoName": videoNameDB,
                                                 "startTime": self.state.schedules[i].start,
                                                 "endTime":  self.state.schedules[i].end, 
@@ -341,7 +339,7 @@ class SchedulerContent extends Component {
                                         });
                 
                                         alert('Send to all screens');
-                                        window.location.reload();
+                                       // window.location.reload();
                                     })
                                 }
                                 else{
@@ -359,7 +357,10 @@ class SchedulerContent extends Component {
                                     videoNameDB= videoNameDB.replace(/\s/g,'');
                                     snapshot.forEach(function(snap){
                                         j=j+1;
-                                        schedulerRef.child(`Screen${j}/${daySelected}/schedule${i+1}`).update({
+                                       
+                                        console.log(`Screen${j}/${daySelected}/schedule${sendSelectedSchedule}`);
+                                        
+                                        schedulerRef.child(`Screen${j}/${daySelected}/schedule${sendSelectedSchedule}`).update({
                                             "VideoName": videoNameDB,
                                             "startTime": self.state.schedules[i].start,
                                             "endTime":  self.state.schedules[i].end, 
@@ -367,14 +368,14 @@ class SchedulerContent extends Component {
                                     });
             
                                     alert('Send to all screens');
-                                    window.location.reload();
+                                  //  window.location.reload();
         
                                 })
                             }
  
                         }   
 
-                        */
+                        
 
                         else{
                             console.log(`ESTE ES EL HORARIO A MODIFICAR schedule${sendSelectedSchedule}`);

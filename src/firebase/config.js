@@ -1,8 +1,8 @@
 export const DB_CONFIG = {
-    apiKey: "AIzaSyB6_Q9z1V5fQkJF1JFZBFvBH3tkyew8mBE",
-    authDomain: "testinginterface-2d656.firebaseapp.com",
-    databaseURL: "https://testinginterface-2d656.firebaseio.com",
-    projectId: "testinginterface-2d656",
-    storageBucket: "testinginterface-2d656.appspot.com",
-    messagingSenderId: "21409910402"
+    apiKey: "AIzaSyACYyezrMqjkjvcv8RRT0XSWageQs5NbHo",
+    authDomain: "plannetdb.firebaseapp.com",
+    databaseURL: "https://plannetdb.firebaseio.com",
+    projectId: "plannetdb",
+    storageBucket: "plannetdb.appspot.com",
+    messagingSenderId: "326789521953"
 }
